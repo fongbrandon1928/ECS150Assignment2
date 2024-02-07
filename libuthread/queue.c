@@ -85,6 +85,25 @@ int queue_delete(queue_t queue, void *data)
 
 int queue_iterate(queue_t queue, queue_func_t func)
 {
+	if (queue == NULL || func == NULL) {
+		return -1;
+	}
+	node_t *current = queue->head;
+    node_t *next = NULL;
+
+	// Iterate through the queue
+    while (current != NULL) {
+        // Save the next node before calling func, in case current node is deleted
+        next = current->next;
+
+        // Call the callback function on the current data
+        func(queue, current->data);
+
+        // Move to the next node
+        current = next;
+    }
+
+    return 0;
 	/* TODO Phase 1 */
 }
 

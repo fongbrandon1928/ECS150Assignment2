@@ -75,7 +75,21 @@ int queue_enqueue(queue_t queue, void *data)
 
 int queue_dequeue(queue_t queue, void **data)
 {
-	/* TODO Phase 1 */
+    if (queue == NULL || data == NULL || queue->length == 0) {
+            return -1;
+        }
+    *data = queue->head->data;
+    node_t* oldest_node = queue->head;
+    if(queue->head->next == NULL){
+        queue->head = NULL;
+        queue->tail = NULL;
+    }
+    else {
+        queue->head = oldest_node->next;
+    }
+    free(oldest_node);
+    queue->length--;
+    return 0;
 }
 
 int queue_delete(queue_t queue, void *data)

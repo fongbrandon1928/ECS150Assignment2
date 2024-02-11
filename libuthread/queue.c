@@ -94,7 +94,44 @@ int queue_dequeue(queue_t queue, void **data)
 
 int queue_delete(queue_t queue, void *data)
 {
-	/* TODO Phase 1 */
+    // Check if the queue or data is NULL
+    if (queue == NULL || data == NULL) {
+        return -1;
+    }
+
+    node_t *current = queue->head;
+    node_t *previous = NULL;
+
+    while (current != NULL) {
+        if (current->data == data) {
+            // If the node to delete is the head
+            if (previous == NULL) {
+                queue->head = current->next;
+                // If deleting the head makes the queue empty, also update the tail
+                if (queue->head == NULL) {
+                    queue->tail = NULL;
+                }
+            } else {
+                // Update the previous node's next pointer
+                previous->next = current->next;
+                // If deleting the last node, update the tail
+                if (current->next == NULL) {
+                    queue->tail = previous;
+                }
+            }
+
+            free(current); // Free the memory of the deleted node
+            queue->length--; // Decrement the queue's length
+            return 0; // Return success
+        }
+
+        // Move to the next node
+        previous = current;
+        current = current->next;
+    }
+
+    // If we reach this point, the data was not found in the queue
+    return -1;
 }
 
 int queue_iterate(queue_t queue, queue_func_t func)

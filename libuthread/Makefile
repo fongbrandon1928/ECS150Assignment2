@@ -1,7 +1,7 @@
 # Compiler to use
 CC := gcc
 # Compilation flags, -c to generate object files, -Wall for all warnings
-CFLAGS := -Wall -c
+CFLAGS := -Wall -Werror -Wextra -c
 # Archiver to use for creating static libraries
 AR := ar
 # Flags for the AR command
@@ -16,7 +16,7 @@ SRC_DIR := .
 OBJ_DIR := .
 
 # Source files (add more .c files to the list as you expand your library)
-SOURCES := $(SRC_DIR)/queue.c
+SOURCES := $(SRC_DIR)/queue.c $(SRC_DIR)/uthread.c $(SRC_DIR)/context.c
 # Object files (corresponding to the source files)
 OBJECTS := $(SOURCES:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 

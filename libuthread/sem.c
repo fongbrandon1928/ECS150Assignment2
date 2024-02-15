@@ -58,7 +58,15 @@ int sem_destroy(sem_t sem)
 
 int sem_down(sem_t sem)
 {
-	/* TODO Phase 3 */
+	if (!sem) {
+		return -1;
+	}
+
+	while (sem->count == 0) {
+		uthread_block();
+	}
+	sem->count--;
+	return 0;
 }
 
 int sem_up(sem_t sem)

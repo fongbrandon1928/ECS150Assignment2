@@ -113,10 +113,17 @@ int uthread_run(bool preempt, uthread_func_t func, void *arg)
 
 void uthread_block(void)
 {
-    /* TODO Phase 3 */
+    current_thread->state = UTHREAD_BLOCK;
+    uthread_yield();
 }
 
 void uthread_unblock(struct uthread_tcb *uthread)
 {
-    /* TODO Phase 3 */
+    if (uthread->state == UTHREAD_BLOCKED)
+    {
+        // Change the thread's state to READY.
+        uthread->state = UTHREAD_READY;
+        // Enqueue the thread to the ready queue so it can be scheduled.
+        queue_enqueue(ready_queue, uthread);
+    }
 }

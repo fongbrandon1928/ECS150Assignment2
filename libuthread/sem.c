@@ -10,9 +10,11 @@ struct semaphore {
 	queue_t *waiting_threads;
 } semaphore_t;
 
+semaphore_t *sem;
+
 sem_t sem_create(size_t count)
 {
-	semaphore_t *sem = (semaphore_t *)malloc(sizeof(semaphore_t));
+	sem = (semaphore_t *)malloc(sizeof(semaphore_t));
 	if (sem == NULL) {
         // Allocation failed
         return NULL;
@@ -61,6 +63,9 @@ int sem_down(sem_t sem)
 
 int sem_up(sem_t sem)
 {
-	/* TODO Phase 3 */
+	sem->count++;
+	void* data;
+	sem->waiting_threadsd->dequeue(sem->waiting_theards, &data);
+	uthread_unblock((uthread*)data);
 }
 

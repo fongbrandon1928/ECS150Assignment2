@@ -5,7 +5,7 @@
 #include "sem.h"
 #include "private.h"
 
-struct semaphore {
+typedef struct semaphore {
 	size_t count;
 	queue_t *waiting_threads;
 } semaphore_t;

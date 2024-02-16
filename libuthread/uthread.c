@@ -113,7 +113,7 @@ int uthread_run(bool preempt, uthread_func_t func, void *arg)
 
 void uthread_block(void)
 {
-    current_thread->state = UTHREAD_BLOCK;
+    current_thread->state = UTHREAD_BLOCKED;
     uthread_yield();
 }
 

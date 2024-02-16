@@ -16,7 +16,7 @@ SRC_DIR := .
 OBJ_DIR := .
 
 # Source files (add more .c files to the list as you expand your library)
-SOURCES := $(SRC_DIR)/queue.c $(SRC_DIR)/uthread.c $(SRC_DIR)/context.c
+SOURCES := $(SRC_DIR)/queue.c $(SRC_DIR)/uthread.c $(SRC_DIR)/context.c $(SRC_DIR)/sem.c $(SRC_DIR)/preempt.c
 # Object files (corresponding to the source files)
 OBJECTS := $(SOURCES:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 

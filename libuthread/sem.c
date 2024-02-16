@@ -74,7 +74,7 @@ int sem_up(sem_t sem)
 	if(!sem){return -1;};
 	sem->count++;
 	void* data;
-	int status = sem->waiting_threads->queue_dequeue(sem->waiting_theards, &data);
+	int status = queue_dequeue(sem->waiting_theards, &data);
 	if(status == -1){
 		return -1;
 	}

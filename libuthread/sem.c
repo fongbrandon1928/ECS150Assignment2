@@ -5,26 +5,29 @@
 #include "sem.h"
 #include "private.h"
 
-typedef struct semaphore {
-	size_t count;
-	queue_t waiting_threads;
+typedef struct semaphore
+{
+    size_t count;
+    queue_t waiting_threads;
 } semaphore_t;
 
 semaphore_t *sem;
 
 sem_t sem_create(size_t count)
 {
-	sem = (semaphore_t *)malloc(sizeof(semaphore_t));
-	if (sem == NULL) {
+    sem = (semaphore_t *)malloc(sizeof(semaphore_t));
+    if (sem == NULL)
+    {
         // Allocation failed
         return NULL;
     }
-	// Initialize the semaphore's count
+    // Initialize the semaphore's count
     sem->count = count;
 
     // Initialize the waiting queue for threads
     sem->waiting_threads = queue_create();
-    if (sem->waiting_threads== NULL) {
+    if (sem->waiting_threads == NULL)
+    {
         // Queue allocation failed, clean up semaphore
         free(sem);
         return NULL;
@@ -34,23 +37,25 @@ sem_t sem_create(size_t count)
 
 int sem_destroy(sem_t sem)
 {
-	if (sem == NULL) {
+    if (sem == NULL)
+    {
         // The semaphore is NULL, cannot destroy
         return -1;
     }
-	semaphore_t *s = (semaphore_t *)sem;
+    semaphore_t *s = (semaphore_t *)sem;
 
-	// Check if there are threads waiting on the semaphore
-    if (queue_length(s->waiting_threads) > 0) {
+    // Check if there are threads waiting on the semaphore
+    if (queue_length(s->waiting_threads) > 0)
+    {
         // There are still threads waiting on the semaphore, cannot destroy
         return -1;
     }
-	// No threads are waiting, so we can safely destroy the semaphore
+    // No threads are waiting, so we can safely destroy the semaphore
 
     // Destroy the waiting queue
     queue_destroy(s->waiting_threads);
 
-    // Deallocate the semaphore itself
+    // Deallocate semaphore
     free(s);
 
     return 0;
@@ -58,27 +63,32 @@ int sem_destroy(sem_t sem)
 
 int sem_down(sem_t sem)
 {
-	if (!sem) {
-		return -1;
-	}
+    if (!sem)
+    {
+        return -1;
+    }
 
-	while (sem->count == 0) {
-		uthread_block();
-	}
-	sem->count--;
-	return 0;
+    while (sem->count == 0)
+    {
+        uthread_block();
+    }
+    sem->count--;
+    return 0;
 }
 
 int sem_up(sem_t sem)
 {
-	if(!sem){return -1;};
-	sem->count++;
-	void* data;
-	int status = queue_dequeue(sem->waiting_threads, &data);
-	if(status == -1){
-		return -1;
-	}
-	uthread_unblock((struct uthread_tcb*)data);
-	return 0;
+    if (!sem)
+    {
+        return -1;
+    };
+    sem->count++;
+    void *data;
+    int status = queue_dequeue(sem->waiting_threads, &data);
+    if (status == -1)
+    {
+        return -1;
+    }
+    uthread_unblock((struct uthread_tcb *)data);
+    return 0;
 }
-

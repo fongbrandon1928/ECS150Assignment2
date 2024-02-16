@@ -7,7 +7,7 @@
 
 typedef struct semaphore {
 	size_t count;
-	queue_t *waiting_threads;
+	queue_t waiting_threads;
 } semaphore_t;
 
 semaphore_t *sem;

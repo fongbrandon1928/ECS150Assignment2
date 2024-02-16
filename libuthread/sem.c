@@ -78,7 +78,7 @@ int sem_up(sem_t sem)
 	if(status == -1){
 		return -1;
 	}
-	uthread_unblock((uthread*)data);
+	uthread_unblock((uthread_tcb*)data);
 	return 0;
 }
 

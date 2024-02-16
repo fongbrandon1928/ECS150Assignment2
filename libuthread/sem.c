@@ -48,7 +48,7 @@ int sem_destroy(sem_t sem)
 	// No threads are waiting, so we can safely destroy the semaphore
 
     // Destroy the waiting queue
-    queue_destroy(s->wait_queue);
+    queue_destroy(s->waiting_threads);
 
     // Deallocate the semaphore itself
     free(s);

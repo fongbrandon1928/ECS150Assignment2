@@ -82,6 +82,9 @@ int uthread_create(uthread_func_t func, void *arg)
 
 int uthread_run(bool preempt, uthread_func_t func, void *arg)
 {
+    if (preempt) {
+        preempt_start();
+    }
     ready_queue = queue_create(); //Creates FIFO queue
     idle_thread = malloc(sizeof(struct uthread_tcb)); //Allocates memory for TCB and checks if successful.
     if (!idle_thread)

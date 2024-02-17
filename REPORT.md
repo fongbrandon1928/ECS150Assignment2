@@ -106,16 +106,34 @@ code.
 This allows the user to be able to split resources among all the threads and to
 stop it if they want a certain task to be finished first.
 
+## Memory Management
+
+The memory deallocation approach in the provided threading code ensures 
+efficient resource management by systematically reclaiming memory allocated to 
+threads upon their completion and during system shutdown. When a thread 
+finishes execution, "uthread_exit" deallocates its stack and control block 
+(TCB) to free up the significant memory resources each thread consumes. 
+This process includes deallocating the thread's execution stack and then 
+freeing the TCB, which holds crucial thread information. Similarly, at the end 
+of the program's execution, "uthread_run" performs cleanup for the idle thread 
+by deallocating its stack and TCB, and also destroying the ready queue to ensure 
+all dynamic memory associated with thread management is released. Additionally, 
+the thread creation process incorporates robust error handling to preemptively 
+free allocated resources in case of initialization failures, preventing memory 
+leaks. This meticulous approach to memory deallocation is essential for 
+maintaining the system's memory efficiency and preventing leaks in a 
+multi-threaded environment, ensuring that resources are only used when 
+necessary and promptly released when they are no longer needed.
+
 ## Tester code
 
 ### queue_tester.c
 
-The queue_tester.c contains various types of test for queue operations. It aims to check for
 
 ### test_preempt.c
 
 The "test_preempt.c" contains code to test the function of preemption in
-threads. Four threads in the code that will be each calculating fibonacci 
+threads. Four threads in the code that will each calculating fibonacci 
 sequences starting at 0 and ending at 40. Since calculating fibonacci numbers 
 at higher numbers using this method is very intensive, it is a good method to 
 test preemption in threads. The main function starts the first thread with 
@@ -123,7 +141,7 @@ preemption disabled. Thread 1 will keep running until the 35th value in the
 fibonacci sequence is starting to be calculated. Preemption will be enabled 
 which allows threads 2, 3, and 4 to start working instead of thread 1 hogging 
 all the resources. To test the disabling of preemption, when thread 4 is 
-calculating the 35th fibonacci number, preemptionis disabled and thread 4 will 
-continue to use all the resources until it isfinished. Then according to the 
+calculating the 35th fibonacci number, preemption is disabled, and thread 4 will 
+continue to use all the resources until it is finished. Then according to the 
 queue, the threads will finish calculating one by one until thread 1 is 
 finished calculating its 40th fibonacci number.

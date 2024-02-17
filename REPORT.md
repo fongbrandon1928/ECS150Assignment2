@@ -86,6 +86,26 @@ value and it_interval for the timer interval. Setting old allows the program
 to revert to the previous state of the timer, ensuring that changes made for 
 preemption do not permanently alter the process's behavior.
 
+## Implementation
+
+Users can leverage this user-level threading code to create, manage, and execute 
+lightweight threads within their applications, allowing for concurrent execution 
+flows. The threading model is built around the concept of thread control blocks 
+(TCBs), which encapsulates the state, context, and stack for each thread.
+
+Users who use this implementation of threading to run their tasks and
+processes have the option of enabling preemption. If the user wants to enable 
+preemption in their threads:
+
+1. They can set the first argument in "uthread_run" to TRUE, to enable
+preemption by default in the threads.
+2. They can enable or disable preemption in the middle of their code by
+implementing the "preempt_enable(bool)" or the "preempt_disable()" line in their
+code.
+
+This allows the user to be able to split resources among all the threads and to
+stop it if they want a certain task to be finished first.
+
 ## Tester code
 
 ### queue_tester.c
@@ -93,15 +113,15 @@ preemption do not permanently alter the process's behavior.
 ### test_preempt.c
 
 The "test_preempt.c" contains code to test the function of preemption in
-threads. There are four threads in the code that will be each calculating 
-fibonacci sequences starting at 0 and ending at 40. Since calculating
-fibonacci numbers at higher numbers using this method is very intensive, it is
-a very good way to test preemption in threads. The main function starts the
-first thread with preemption disabled. Thread 1 will keep running until
-the 35th value in the fibonacci sequence is starting to be calculated.
-Preemption will be enabled which allows thread 2, 3, and 4 to start working
-instead of thread 1 hogging all the resources. To test the disabling of
-preemption, when thread 4 is calculating the 35th fibonacci number, preemption
-is disabled and thread 4 will continue to use all the resources until it is
-finished. Then according to the queue, the threads will finish calculating
-one by one until thread 1 is finished calculating its 40th fibonacci number.
+threads. Four threads in the code that will be each calculating fibonacci 
+sequences starting at 0 and ending at 40. Since calculating fibonacci numbers 
+at higher numbers using this method is very intensive, it is a good method to 
+test preemption in threads. The main function starts the first thread with 
+preemption disabled. Thread 1 will keep running until the 35th value in the 
+fibonacci sequence is starting to be calculated. Preemption will be enabled 
+which allows threads 2, 3, and 4 to start working instead of thread 1 hogging 
+all the resources. To test the disabling of preemption, when thread 4 is 
+calculating the 35th fibonacci number, preemptionis disabled and thread 4 will 
+continue to use all the resources until it isfinished. Then according to the 
+queue, the threads will finish calculating one by one until thread 1 is 
+finished calculating its 40th fibonacci number.

@@ -61,6 +61,7 @@ int sem_destroy(sem_t sem)
     return 0;
 }
 
+//thread acquires resource else blocked if not available
 int sem_down(sem_t sem)
 {
     if (!sem)
@@ -76,6 +77,7 @@ int sem_down(sem_t sem)
     return 0;
 }
 
+//indicate to a blocked thread of available resource
 int sem_up(sem_t sem)
 {
     if (!sem)

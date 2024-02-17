@@ -1,8 +1,8 @@
 # Compiler to use
 CC := gcc
-# Compilation flags, -c to generate object files, -Wall for all warnings
+# Compilation flags, -c to generate object files
 CFLAGS := -Wall -Werror -Wextra -c
-# Archiver to use for creating static libraries
+# Archiver for static library
 AR := ar
 # Flags for the AR command
 ARFLAGS := rcs
@@ -10,14 +10,14 @@ ARFLAGS := rcs
 # Target library
 LIB := libuthread.a
 
-# Source directory (adjust this if your source files are in a different directory)
+# Source directory
 SRC_DIR := .
-# Object files directory (adjust this if you want to place object files elsewhere)
+# Object files directory
 OBJ_DIR := .
 
-# Source files (add more .c files to the list as you expand your library)
+# Source files
 SOURCES := $(SRC_DIR)/queue.c $(SRC_DIR)/uthread.c $(SRC_DIR)/context.c $(SRC_DIR)/preempt.c $(SRC_DIR)/sem.c
-# Object files (corresponding to the source files)
+# Object files
 OBJECTS := $(SOURCES:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 
 # Default target: build the library

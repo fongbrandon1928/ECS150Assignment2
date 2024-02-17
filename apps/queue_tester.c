@@ -4,11 +4,17 @@
 #include <stdlib.h>
 #include "queue.h"
 
+void queue_delete_wrapper(queue_t q, void *data) {
+    queue_delete(q, data);
+}
+
 void test_create(void)
 {
-    fprintf(stderr, "*** TEST create ***\n");
+    fprintf(stderr, "*** TEST create ***");
 
-    assert(queue_create() != NULL);
+    assert(queue_create() != NULL); {
+    	printf(" PASSED. \n");
+    }
 }
 
 /* Enqueue/Dequeue simple */
@@ -17,69 +23,85 @@ void test_queue_simple(void)
     int data = 3, *ptr;
     queue_t q;
 
-    fprintf(stderr, "*** TEST queue_simple ***\n");
+    fprintf(stderr, "*** TEST queue_simple ***");
 
     q = queue_create();
     queue_enqueue(q, &data);
     queue_dequeue(q, (void**)&ptr);
-    assert(ptr == &data);
+    assert(ptr == &data); {
+    	printf(" PASSED. \n");
+    }
 }
 
 //test successful deletion
 void test_queue_delete(void)
 {
-    fprintf(stderr, "*** TEST queue_delete ***\n");
+    fprintf(stderr, "*** TEST queue_delete ***");
     int* ptr = malloc(sizeof(int));
     *ptr = 3;
     queue_t q = queue_create();
     queue_delete(q, (void*)ptr);
-    assert(0 == queue_length(q));
+    assert(0 == queue_length(q)); {
+    	printf(" PASSED. \n");
+    }
 }
 
 //test enqueue mass operation of enqueue followed by delete
 void test_crazy_enqueue(void)
 {
-    fprintf(stderr, "*** TEST queue_crazy_enqueue ***\n");
+    fprintf(stderr, "*** TEST queue_crazy_enqueue ***");
     queue_t q = queue_create();
     for(int i = 0; i < 1000000; i++)
     {
         queue_enqueue(q, &i);
     }
-    queue_iterate(q, (queue_func_t) queue_delete);
-    assert(queue_length(q) == 0);
+    queue_iterate(q, queue_delete_wrapper);
+    assert(queue_length(q) == 0); {
+    	printf(" PASSED. \n");
+    }
 }
 
 //test successful dequeue
 void test_dequeue(void)
 {
-    fprintf(stderr, "***TEST dequeue***\n");
+    fprintf(stderr, "*** TEST dequeue ***");
     queue_t q = queue_create();
+    void *data;
     for(int i = 0; i < 1000000; i++)
     {
-        queue_enqueue(q, &i);
+        queue_enqueue(q, malloc(sizeof(int)));
     }
-    queue_iterate(q, (queue_func_t) queue_dequeue);
-    assert(queue_length(q) == 0);
+    while (queue_length(q) > 0)
+    {
+        queue_dequeue(q, &data);
+        free(data);
+    }
+    assert(queue_length(q) == 0); {
+    	printf(" PASSED. \n");
+    }
+    queue_destroy(q);
 }
 
 //test successful destroy
 void test_destroy(void)
 {
-    fprintf(stderr, "***TEST destroy***\n");
+    fprintf(stderr, "*** TEST destroy ***");
     queue_t q = queue_create();
     for(int i = 0; i < 1000000; i++)
     {
         queue_enqueue(q, &i);
     }
-    queue_iterate(q, (queue_func_t) queue_delete);
+    queue_iterate(q, queue_delete_wrapper);
     int retrn = queue_destroy(q);
-    assert(retrn == 0);
+    assert(retrn == 0); {
+    	printf(" PASSED. \n");
+    }
 }
 
 //test mass enqueue operations and length after each enqueue
 void test_length(void)
 {
-    fprintf(stderr, "***TEST Length***\n");
+    fprintf(stderr, "*** TEST Length ***");
     queue_t q = queue_create();
     void* data;
     for(int i = 0; i < 1000000; i++)
@@ -88,15 +110,17 @@ void test_length(void)
     }
     for(int j = 1000000; j >= 0; j--)
     {
-        assert(queue_length(q) == j);
+        assert(queue_length(q) == j); {
+    }
         queue_dequeue(q, &data);
     }
+    printf(" PASSED. \n");
 }
 
 //test if contents of each node are correct
 void test_contents()
 {
-    fprintf(stderr, "TEST Contents\n");
+    fprintf(stderr, "*** TEST CONTENTS ***");
     queue_t q = queue_create();
     int *data; //Change to pointer type to store addresses
     int d;
@@ -117,6 +141,7 @@ void test_contents()
         assert(d == j);
         free(data); //Free the dynamically allocated memory
     }
+    printf(" PASSED. \n");
 
     //destroy queue
     queue_destroy(q);
@@ -125,30 +150,35 @@ void test_contents()
 //test if dequeue operation returns -1 on fail
 void test_empty_dequeue()
 {
-    fprintf(stderr, "***TEST EMPTY DEQUEUE***\n");
+    fprintf(stderr, "*** TEST EMPTY DEQUEUE ***");
     queue_t q = queue_create();
     void* data;
     assert(queue_dequeue(q, &data) == -1);
+    printf(" PASSED. \n");
 }
 
 //test if enqueue operation returns -1 on fail
 void test_enqueue_null()
 {
-    fprintf(stderr, "***TEST ENQUEUE NULL***\n");
+    fprintf(stderr, "*** TEST ENQUEUE NULL ***");
     queue_t q = queue_create();
-    assert(queue_enqueue(q, NULL) == -1);
+    assert(queue_enqueue(q, NULL) == -1); {
+    	printf(" PASSED. \n");
+    }
 }
 
 //test attempt to destroy full queue
 void test_full_queue_destroy()
 {
-    fprintf(stderr, "***TEST FULL QUEUE DESTROY***\n");
+    fprintf(stderr, "*** TEST FULL QUEUE DESTROY ***");
     queue_t q = queue_create();
     for(int i = 0; i < 5; i++)
     {
         queue_enqueue(q, &i);
     }
-    assert(queue_destroy(q) == -1);
+    assert(queue_destroy(q) == -1); {
+    	printf(" PASSED. \n");
+    }
 }
 
 

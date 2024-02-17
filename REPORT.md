@@ -110,6 +110,8 @@ stop it if they want a certain task to be finished first.
 
 ### queue_tester.c
 
+The queue_tester.c contains various types of test for queue operations. It aims to check for
+
 ### test_preempt.c
 
 The "test_preempt.c" contains code to test the function of preemption in

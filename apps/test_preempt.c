@@ -18,7 +18,7 @@ void thread4(void *arg)
     for (int i = 0; i <= 40; i++) {
     	if (i == 35) {
     		preempt_stop();
-    		printf("Stopped Preemption\n");
+    		printf("\nStopped Preemption.\n\n");
     	}
         printf("thread 4(%d): %ld\n", i, fib(i));
     }
@@ -52,7 +52,7 @@ void thread1(void *arg)
     for (int i = 0; i <= 40; i++) {
     	if (i == 35) {
     		preempt_start(true);
-    		printf("Started Preemption\n");
+    		printf("\nStarted Preemption.\n\n");
     	}
     	printf("thread 1(%d): %ld\n", i, fib(i));
     }

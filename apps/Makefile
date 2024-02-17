@@ -3,6 +3,7 @@ programs := \
 	queue_tester_example.x \
 	uthread_hello.x \
 	uthread_yield.x \
+	queue_tester.x \
 	test_preempt.x
 
 # User-level thread library

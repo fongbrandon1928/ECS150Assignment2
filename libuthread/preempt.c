@@ -52,16 +52,16 @@ void preempt_start(bool preempt)
 	saDef.sa_flags = 0;
 	sigaction(SIGVTALRM, &saDef, NULL);
 
-	// make in such that it runs 100 times per second
+	// Initialize timer to run 100 times per second.
 	struct itimerval timer;
 	timer.it_value.tv_sec = wholeSec;
 	timer.it_value.tv_usec = secCnvrtMicro / HZ;
 
-	// put in a initial start to 100microsec/100
+	// Set interval of repetitive signals to maintain 100HZ frequency.
 	timer.it_interval.tv_sec = wholeSec;
 	timer.it_interval.tv_usec = secCnvrtMicro / HZ;
 
-	// initalize new Itimerval for initial signal time and for everyother signal after that
+	// Start the timer with ITIMER_VIRTUAL
 	setitimer(ITIMER_VIRTUAL, &timer, &old);
 
 }

@@ -13,9 +13,11 @@
  * Frequency of preemption
  * 100Hz is 100 times per second
  */
+
 #define HZ 100
 #define secCnvrtMicro 1000000
 #define wholeSec 0
+
 struct sigaction saDef;
 struct itimerval old;
 sigset_t sigset;

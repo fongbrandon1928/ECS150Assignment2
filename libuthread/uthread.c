@@ -51,6 +51,12 @@ void uthread_yield(void)
 void uthread_exit(void)
 {
     current_thread->state = UTHREAD_DONE;
+    if (current_thread->stack != NULL) {
+        uthread_ctx_destroy_stack(current_thread->stack);
+    }
+
+    // Free the thread control block (TCB)
+    free(current_thread);
     uthread_yield();
 }
 
@@ -82,9 +88,6 @@ int uthread_create(uthread_func_t func, void *arg)
 
 int uthread_run(bool preempt, uthread_func_t func, void *arg)
 {
-    if (preempt) {
-        preempt_start(preempt);
-    }
     ready_queue = queue_create(); //Creates FIFO queue
     idle_thread = malloc(sizeof(struct uthread_tcb)); //Allocates memory for TCB and checks if successful.
     if (!idle_thread)
@@ -109,6 +112,9 @@ int uthread_run(bool preempt, uthread_func_t func, void *arg)
     }
 
     // Cleanup
+    if (idle_thread->stack != NULL) {
+        uthread_ctx_destroy_stack(idle_thread->stack);
+    }
     queue_destroy(ready_queue); //After all threads complete execution.
     free(idle_thread);
     return 0;

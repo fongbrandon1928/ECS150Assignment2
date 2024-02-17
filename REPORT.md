@@ -129,6 +129,23 @@ necessary and promptly released when they are no longer needed.
 
 ### queue_tester.c
 
+The queue_tester.c contains various types of test for queue operations. It aims
+to cover edge case operations which can lead to failure and program crashing.
+Such test cases include test_contents, whose job is to run the enquque operation
+on a mass scale and proceed to validate each node's data field with the correct
+data. This operation helps to assure that the queue is taking in user provided
+data and enqueuing it properly. After this we decide to test if the queue was
+able to properly dequeue all its contents. This is tested by the function
+test_dequeue. This function at first enqueues a bunch of data and after proceeds
+to dequeue it. This is crucial in sense to ensure user data is properly deleted
+at command. This function utilizes the queue_iterate function to iteratively
+clear all data from queue and after all done utilizes the length function to
+return the emptied queue length. Another importat aspect of queue operations
+was the destory. This is tested by the function test_full_queue_destroy.
+What this function does is once enqueue some data and then using queue_destory,
+destory the queue. However, it should return -1, the use is not allowed to
+destory a full queue. There are many other test cases like the ones shown above
+with variations, to get a full comporenshive coverage of queue operations.
 
 ### test_preempt.c
 
